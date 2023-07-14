@@ -3,6 +3,7 @@ package Core.Service;
 import Core.Enums.BoardType;
 import Core.Journal.Journal;
 import Core.Journal.ProxyJournal;
+import Core.MedicalCard.MedicalCard;
 import Core.MedicalPackages.Director;
 import Core.MedicalPackages.SpecialPackages.DriveLicencePackageBuilder;
 import Core.MedicalPackages.SpecialPackages.WeaponBoardPackageBuilder;
@@ -34,5 +35,11 @@ public class ManagementService {
 
     public static Order makePayment(Board board){
         return PaymentService.makePayment(board);
+    }
+
+    public static MedicalCard getPatientMedical(Patient patient){
+        MedicalCard medicalCardInstance = MedicalCard.getMedicalCardInstance();
+        medicalCardInstance.setPatient(patient);
+        return medicalCardInstance;
     }
 }

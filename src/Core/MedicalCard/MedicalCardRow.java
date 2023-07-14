@@ -31,6 +31,8 @@ public class MedicalCardRow {
     Staff cratedBy;
     Date date;
 
+    //TODO procedure; result(as another class?)
+
     public MedicalCardRow(Staff cratedBy, Patient patient) {
         this.patient = patient;
         this.cratedBy = cratedBy;

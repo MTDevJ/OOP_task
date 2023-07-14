@@ -22,6 +22,10 @@ public class MedicalCard implements MedicalCardInterface{
     private MedicalCard() {
         medicalCardRows = new ArrayList<MedicalCardRow>();
     }
+    private MedicalCard(Patient patient) {
+        this();
+        this.patient = patient;
+    }
 
     public static MedicalCard getMedicalCardInstance(){
         if (medicalCardInstance == null) return new MedicalCard();

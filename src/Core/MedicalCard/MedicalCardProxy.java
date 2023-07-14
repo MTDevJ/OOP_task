@@ -20,6 +20,6 @@ public class MedicalCardProxy implements MedicalCardInterface{
     }
 
     private Boolean checkAccess(Staff person){
-        return (person instanceof MedicalStaff);
+        return (person instanceof MedicalStaff);//TODO and check if doctor support this procedure/test/
     }
 }
