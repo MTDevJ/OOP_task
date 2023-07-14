@@ -42,12 +42,7 @@ public class Main {
         if (board != null){
             Order order = ManagementService.makePayment(board);
             if (order.isPaid()) {
-                ArrayList<Analysis> analysis = board.getAnalysis();
-                ArrayList<Examination> examinations = board.getExaminations();
-                //TODO
-                // loop over it
-                // make record in medical card;
-                MedicalService.makeMedicalCardRecord(new MedicalCardProxy(patientMedicalCard), null, patientMedicalCard.getPatient());
+                start(board,patientMedicalCard);
             }
         }
     }
@@ -71,6 +66,15 @@ public class Main {
         patient.setRequest(new PatientRequest(BoardType.WORK));
         System.out.println(patient.getName());
         return patient;
+    }
+
+    private static void start(Board board, MedicalCard medicalCard){
+        ArrayList<Analysis> analysis = board.getAnalysis();
+        ArrayList<Examination> examinations = board.getExaminations();
+        //TODO
+        // loop over it
+        // make record in medical card;
+        MedicalService.makeMedicalCardRecord(new MedicalCardProxy(medicalCard), null, medicalCard.getPatient());
     }
 
 }
