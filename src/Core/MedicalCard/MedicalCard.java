@@ -2,31 +2,28 @@ package Core.MedicalCard;
 
 import Core.Person.Patient;
 import Core.Person.Stuff.Management.Administrator;
+import Core.Person.Stuff.Staff;
 import Core.Service.Board.Board;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MedicalCard {
+public class MedicalCard implements MedicalCardInterface{
 
-    private MedicalCard medicalCardInstance;
+    private static MedicalCard medicalCardInstance;
+
+    private ArrayList<MedicalCardRow> medicalCardRows;
     private Patient patient;
-    private String diagnosis;
-
     private ArrayList<Board> boards;
-
-    //TODo private ArrayList<BoardResult> boardResults;
 
     private Date createdDate;
     private Administrator createdBy;
 
     private MedicalCard() {
-        boards = new ArrayList<>();
-        diagnosis = "Healthy";
-        createdDate = new Date();
+        medicalCardRows = new ArrayList<MedicalCardRow>();
     }
 
-    public MedicalCard getMedicalCardInstance(){
+    public static MedicalCard getMedicalCardInstance(){
         if (medicalCardInstance == null) return new MedicalCard();
         return medicalCardInstance;
     }
@@ -39,19 +36,8 @@ public class MedicalCard {
         this.patient = patient;
     }
 
-    public ArrayList<Board> getBoards() {
-        return boards;
-    }
-
-    public void setBoard(Board board) {
-        this.boards.add(board);
-    }
-
-    public String getDiagnosis() {
-        return diagnosis;
-    }
-
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
+    @Override
+    public void addRow(Staff person, Patient patient) {
+        medicalCardRows.add(new MedicalCardRow(person, patient));
     }
 }

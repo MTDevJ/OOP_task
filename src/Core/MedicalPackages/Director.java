@@ -1,8 +1,10 @@
 package Core.MedicalPackages;
 
+import Core.PatientRequest;
 import Core.Person.Patient;
 import Core.Service.Analysis.Analysis;
 import Core.Service.Analysis.BloodAnalysis;
+import Core.Service.Board.Board;
 import Core.Service.Examination.*;
 
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ public class Director {
     }
 
     //Special medical committee
-    public void makeWorkPackage(PackageBuilder packageBuilder, Patient patient){
+    public Board makeWorkPackage(PackageBuilder packageBuilder, Patient patient){
 
         ArrayList<Analysis> analysis = new ArrayList<Analysis>();
         analysis.add(new BloodAnalysis());
@@ -29,9 +31,10 @@ public class Director {
         packageBuilder.setAnalysis(analysis);
         packageBuilder.setExaminations(examinations);
         packageBuilder.setPrice(100);
+        return packageBuilder.returnPackage();
     }
 
-    public void makeDriveLicencePackage(PackageBuilder packageBuilder, Patient patient){
+    public Board makeDriveLicencePackage(PackageBuilder packageBuilder, Patient patient){
 
         ArrayList<Examination> examinations = new ArrayList<Examination>();
         examinations.add(new EyesCheck());
@@ -39,9 +42,10 @@ public class Director {
         packageBuilder.setPatient(patient);
         packageBuilder.setExaminations(examinations);
         packageBuilder.setPrice(100);
+        return packageBuilder.returnPackage();
     }
 
-    public void makeWeaponPackage(PackageBuilder packageBuilder, Patient patient){
+    public Board makeWeaponPackage(PackageBuilder packageBuilder, Patient patient){
 
         ArrayList<Examination> examinations = new ArrayList<Examination>();
         examinations.add(new PsychiatristCheck());
@@ -50,6 +54,7 @@ public class Director {
         packageBuilder.setPatient(patient);
         packageBuilder.setExaminations(examinations);
         packageBuilder.setPrice(200);
+        return packageBuilder.returnPackage();
     }
 
     //Other medical committee

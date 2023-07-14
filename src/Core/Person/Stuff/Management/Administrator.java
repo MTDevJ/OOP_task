@@ -1,13 +1,14 @@
 package Core.Person.Stuff.Management;
 
 import Core.Enums.DoctorType;
+import Core.Enums.ManagementType;
 
 public class Administrator extends ManagementStaff {
 
-    private final DoctorType TYPE = DoctorType.THERAPIST;
+    private final ManagementType TYPE = ManagementType.ADMINISTRATOR;
 
     @Override
-    public DoctorType getType() {
+    public ManagementType getType() {
         return TYPE;
     }
 }
