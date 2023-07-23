@@ -1,80 +1,88 @@
-import Core.Enums.BoardType;
-import Core.Enums.DoctorType;
-import Core.Enums.ManagementType;
-import Core.Journal.Journal;
-import Core.Journal.ProxyJournal;
-import Core.MedicalCard.MedicalCard;
-import Core.MedicalCard.MedicalCardProxy;
-import Core.Order;
-import Core.PatientRequest;
-import Core.Person.Patient;
-import Core.Person.Stuff.Management.Administrator;
-import Core.Person.Stuff.Management.ManagementStaff;
-import Core.Person.Stuff.Medical.MedicalStaff;
-import Core.Person.Stuff.Medical.Therapist;
-import Core.Person.Stuff.Staff;
-import Core.Service.Analysis.Analysis;
-import Core.Service.Board.Board;
-import Core.Service.Examination.Examination;
-import Core.Service.ManagementService;
-import Core.Service.MedicalService;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import core.appointment.AppointmentList;
+import core.appointment.AppointmentResult;
+import core.person.Patient;
+import core.person.stuff.medical.DoctorType;
+import core.person.stuff.medical.MedicalStaff;
+import core.person.stuff.management.strategy.ManagementRegistrationStrategy;
+import core.person.stuff.medical.strategy.MedicalAppointmentStrategy;
+import core.person.stuff.medical.strategy.TherapistAppointmentStrategy;
+import core.service.board.BoardType;
+import core.person.stuff.management.ManagementType;
+import core.journal.Journal;
+import core.journal.ProxyJournal;
+import core.medicalCard.MedicalCardProxy;
+import core.MedicalCenter;
+import core.person.client.ClientRequest;
+import core.person.client.Client;
+import core.person.stuff.management.ManagementStaff;
+import core.medicalCard.MedicalCardService;
 
 public class Main {
-    static HashMap<ManagementType, Staff> management = new HashMap<ManagementType, Staff>();
-    static HashMap<DoctorType, Staff> medical = new HashMap<DoctorType, Staff>();
-    static Journal journal;
 
     public static void main(String[] args) {
-        initMedicalCenter();
-        Patient patient = preparePatient();
+        MedicalCenter medicalCenter = new MedicalCenter(Journal.getJournalInstance());
+        Client client = preparePatient();
 
-        ManagementService.registerPatient(
-                new ProxyJournal(journal),
-                management.get(ManagementType.ADMINISTRATOR),
-                patient
+        ManagementStaff administrator = medicalCenter.getManagement().get(ManagementType.ADMINISTRATOR);
+        administrator.setStrategy(new ManagementRegistrationStrategy());
+        Patient patient = administrator.doJob(
+                new ProxyJournal(medicalCenter.getJournal()),
+                client,
+                administrator,
+                medicalCenter.getMedicalPackage(),
+                medicalCenter.getMedical()
         );
-        MedicalCard patientMedicalCard = ManagementService.getPatientMedical(patient);
-        Board board = ManagementService.providePackage(patient);//TODO should i register it in MC or J?
 
-        if (board != null){
-            Order order = ManagementService.makePayment(board);
-            if (order.isPaid()) {
-                start(board,patientMedicalCard);
-            }
+        if (patient != null && !patient.getAppointmentList().isEmpty()) {
+            medicalCenter.getJournal().printJournal();
+            startMedicalExamination(patient);
         }
     }
 
-    private static void initMedicalCenter() {
-        MedicalStaff therapist = new Therapist();
-        therapist.setName("Mr.Therapist");
-        medical.put(therapist.getType(), therapist);
-        //TODO add other doctors
-
-        ManagementStaff administrator = new Administrator();
-        administrator.setName("Mr.Admin");
-        management.put(administrator.getType(), therapist);
-
-        journal = Journal.getJournalInstance();
-    }
-
-    private static Patient preparePatient() {
-        Patient patient = new Patient();
+    private static Client preparePatient() {
+        Client patient = new Client();
         patient.setName("TEST Patient");
-        patient.setRequest(new PatientRequest(BoardType.WORK));
-        System.out.println(patient.getName());
+        patient.setAge(90);
+        patient.setRequest(new ClientRequest(BoardType.WORK));
         return patient;
     }
 
-    private static void start(Board board, MedicalCard medicalCard){
-        ArrayList<Analysis> analysis = board.getAnalysis();
-        ArrayList<Examination> examinations = board.getExaminations();
-        //TODO
-        // loop over it
-        // make record in medical card;
-        MedicalService.makeMedicalCardRecord(new MedicalCardProxy(medicalCard), null, medicalCard.getPatient());
+    private static void startMedicalExamination(Patient patient) {
+        patient.printAppointmentList();
+        System.out.println("***Appointment started***");
+
+        for (AppointmentList appointmentList : patient.getAppointmentList()) {
+            MedicalStaff doctor = appointmentList.getAppointment().getDoctor();
+            doctor.setStrategy(getStrategyByMedicalService(appointmentList));
+
+            MedicalCardService.makeMedicalCardRecord(
+                    new MedicalCardProxy(patient.getMedicalCard()),
+                    doctor,
+                    new AppointmentResult(
+                            appointmentList.getAppointment(), doctor.doAppointment(patient)
+                    )
+            );
+            System.out.println(appointmentList.getMedicalService().getClass().getName().substring(appointmentList.getMedicalService().getClass().getName().lastIndexOf('.')+1) + " has been done");
+
+        }
+        System.out.println();
+        System.out.println("Analyse patient data...");
+        System.out.println();
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        patient.getMedicalCard().print();
+    }
+
+    private static MedicalAppointmentStrategy getStrategyByMedicalService(AppointmentList appointmentList) {
+        MedicalAppointmentStrategy strategy = null;
+        if (appointmentList.getAppointment().getDoctor().getType() == DoctorType.THERAPIST){
+            strategy = new TherapistAppointmentStrategy();
+        };
+        //TODO add other strategy for other doctors;
+        return strategy;
     }
 
 }

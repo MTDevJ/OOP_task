@@ -1,0 +1,5 @@
+package core.person.stuff.medical;
+
+public enum DoctorType {
+    OPHTHALMOLOGIST, THERAPIST, CARDIOLOGIST, PSYCHIATRIST, ULTRASOUND_DOCTOR, RADIOLOGIST,HEMATOLOGIST
+}
