@@ -8,8 +8,6 @@ import java.util.Date;
 
 public class MedicalCard implements MedicalCardInterface{
 
-    private static MedicalCard medicalCardInstance;
-
     private ArrayList<MedicalCardRecord> medicalCardRecords;
     private Client patient;
 
@@ -21,15 +19,10 @@ public class MedicalCard implements MedicalCardInterface{
         medicalCardRecords = new ArrayList<MedicalCardRecord>();
     }
 
-    private MedicalCard(ManagementStaff administrator, Client patient) {
+    public MedicalCard(ManagementStaff administrator, Client patient) {
         this();
         this.patient = patient;
         this.createdBy = administrator;
-    }
-
-    public static MedicalCard getMedicalCardInstance(ManagementStaff person, Client patient){
-        if (medicalCardInstance == null) return new MedicalCard(person, patient);
-        return medicalCardInstance;
     }
 
     public Client getPatient() {

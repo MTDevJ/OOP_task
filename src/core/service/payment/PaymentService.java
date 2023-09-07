@@ -8,7 +8,7 @@ public class PaymentService {
         board.setPaid(true);
         return new Order(
                 client,
-                board.getPrice(),
+                board.getTotalPrice(),
                 board
         );
     }

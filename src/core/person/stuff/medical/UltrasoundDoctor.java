@@ -1,5 +1,6 @@
 package core.person.stuff.medical;
 
+import core.person.Patient;
 import core.service.examination.UltrasoundCheck;
 
 public class UltrasoundDoctor extends MedicalStaff {
@@ -13,5 +14,10 @@ public class UltrasoundDoctor extends MedicalStaff {
     @Override
     public DoctorType getType() {
         return TYPE;
+    }
+
+    @Override
+    public String doAppointment(Patient patient) {
+        return null;
     }
 }

@@ -10,7 +10,6 @@ public class MedicalCardRecord {
     Date date;
 
     AppointmentResult appointmentResult;
-    //TODO String resolution; ?
 
     public MedicalCardRecord(MedicalStaff cratedBy, AppointmentResult appointmentResult) {
         this.cratedBy = cratedBy;

@@ -7,5 +7,6 @@ public class EyesCheck extends Examination{
     public EyesCheck() {
         doctorType = DoctorType.OPHTHALMOLOGIST;
         appointmentDuration = 1000;
+        price = 25;
     }
 }

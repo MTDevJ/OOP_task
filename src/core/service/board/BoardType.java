@@ -1,5 +1,5 @@
 package core.service.board;
 
 public enum BoardType {
-     WORK,DRIVE_LICENCE,WEAPON
+     WORK,DRIVE_LICENCE,WEAPON,OTHER
 }

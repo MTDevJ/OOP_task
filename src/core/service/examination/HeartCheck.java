@@ -7,5 +7,6 @@ public class HeartCheck extends Examination{
     public HeartCheck() {
         doctorType = DoctorType.CARDIOLOGIST;
         appointmentDuration = 1000;
+        price = 30;
     }
 }

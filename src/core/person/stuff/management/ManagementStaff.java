@@ -1,5 +1,6 @@
 package core.person.stuff.management;
 
+import core.MedicalCenter;
 import core.journal.ProxyJournal;
 import core.person.Patient;
 import core.person.Person;
@@ -16,11 +17,15 @@ import java.util.Map;
 public abstract class ManagementStaff  extends Person implements Staff {
 
     ManagementStrategy strategy;
+    MedicalCenter medicalCenter;
 
-    public Patient doJob(ProxyJournal journal, Client client, ManagementStaff person, Map<BoardType, Board> packages, Map<DoctorType, MedicalStaff> medicalStaff) {
-        return strategy.execute(journal, client, person, packages, medicalStaff);
+    public ManagementStaff(MedicalCenter medicalCenter) {
+        this.medicalCenter = medicalCenter;
     }
 
+    public Patient doJob(Client client) {
+        return strategy.execute(medicalCenter, client, this);
+    }
     public abstract ManagementType getType();
 
     public void setStrategy(ManagementStrategy strategy) {

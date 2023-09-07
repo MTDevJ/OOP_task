@@ -1,8 +1,5 @@
 package core.medicalCard;
 
-import core.person.stuff.medical.MedicalStaff;
-import core.person.stuff.Staff;
-
 public class MedicalCardProxy implements MedicalCardInterface{
 
     MedicalCard medicalCard;
@@ -13,12 +10,12 @@ public class MedicalCardProxy implements MedicalCardInterface{
 
     @Override
     public void addRecord(MedicalCardRecord record) {
-        if (checkAccess(record.cratedBy)){
+        if (checkAccess(record)){
             medicalCard.addRecord(record);
         }
     }
 
-    private Boolean checkAccess(Staff person){
-        return (person instanceof MedicalStaff);//TODO and check if doctor support this procedure/test/
+    private Boolean checkAccess(MedicalCardRecord record){
+        return ((record.cratedBy == record.appointmentResult.getAppointment().getDoctor()));
     }
 }

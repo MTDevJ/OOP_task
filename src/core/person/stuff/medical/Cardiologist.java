@@ -1,5 +1,6 @@
 package core.person.stuff.medical;
 
+import core.person.Patient;
 import core.service.examination.HeartCheck;
 
 public class Cardiologist extends MedicalStaff {
@@ -15,4 +16,13 @@ public class Cardiologist extends MedicalStaff {
     public DoctorType getType() {
         return TYPE;
     }
+
+    @Override
+    public String doAppointment(Patient patient) {
+        if(patient.getClient().getAge() > 70){
+            return null;
+        }
+        return "Healthy";
+    }
 }
+
